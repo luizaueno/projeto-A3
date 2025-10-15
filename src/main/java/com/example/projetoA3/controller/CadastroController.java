@@ -1,35 +1,44 @@
 package com.example.projetoA3.controller;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 import com.example.projetoA3.model.Cadastro;
 import com.example.projetoA3.repository.CadastroRepository;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-
-
-@RestController // para responder requisições http
-@RequestMapping("/cadastro") // caminho base da url para métodos da classe 
-
+@RestController
+@RequestMapping("/cadastro")
 public class CadastroController {
+
     @Autowired
-    private CadastroRepository cadastroRepository;  // pode ter acesso ao banco de dados no controller
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CadastroRepository cadastroRepository;
+
     @PostMapping
     public Cadastro criarCadastro(@RequestBody Cadastro cadastro) {
-       
-    return cadastroRepository.save(cadastro); // responde a requições de post em cadastro, ou seja, um novo cadastro, salva e retorna o cadastro salvo como resposta
+        System.out.println(">>> MÉTODO criarCadastro() FOI CHAMADO");
+        // Captura a senha original
+        String senhaOriginal = cadastro.getSenha();
+
+        // Criptografa a senha
+        String senhaCriptografada = passwordEncoder.encode(senhaOriginal);
+
+        // Exibe no console para verificação
+        System.out.println("Senha original: " + senhaOriginal);
+        System.out.println("Senha criptografada: " + senhaCriptografada);
+
+        // Salva a senha criptografada no objeto
+        cadastro.setSenha(senhaCriptografada);
+
+        // Salva no banco e retorna
+        return cadastroRepository.save(cadastro);
     }
+
     @GetMapping
     public List<Cadastro> listarCadastros() {
         return cadastroRepository.findAll();
-}
     }
-    
-    
-
+}
