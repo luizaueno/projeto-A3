@@ -12,32 +12,39 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.projetoA3.model.Cadastro;
 import com.example.projetoA3.model.Login;
 import com.example.projetoA3.repository.CadastroRepository;
+import com.example.projetoA3.service.TokenService;
+
+import com.example.projetoA3.model.AuthResponse;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/fazer-login")
 public class LoginController {
 
-    @Autowired
-    private CadastroRepository cadastroRepository;
+    private final TokenService tokenService;
+    private final CadastroRepository cadastroRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    public LoginController(TokenService tokenService, CadastroRepository cadastroRepository, PasswordEncoder passwordEncoder) {
+    this.tokenService = tokenService;
+    this.cadastroRepository = cadastroRepository;
+    this.passwordEncoder = passwordEncoder;
+}
+
+
 
     @PostMapping
-    public ResponseEntity<String> login(@RequestBody Login login) {
+    public ResponseEntity<AuthResponse> login(@RequestBody Login login) {
         Cadastro cadastro = cadastroRepository.findByEmail(login.getEmail());
 
         if (cadastro == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                 .body("Usuário não encontrado. Cadastre-se primeiro.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new AuthResponse("Usuário não encontrado. Cadastre-se primeiro."));
         }
-        System.out.println("Senha enviada: " + login.getSenha());
-        System.out.println("Senha salva: " + cadastro.getSenha());
         if (passwordEncoder.matches(login.getSenha(), cadastro.getSenha())) {
-            return ResponseEntity.ok("Login realizado com sucesso");
+            String token = tokenService.generateToken(cadastro.getEmail());
+            return ResponseEntity.ok(new AuthResponse(token));
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                                 .body("Senha incorreta, tente novamente");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED) .body(new AuthResponse("Senha incorreta, tente novamente"));
         }
         
     }

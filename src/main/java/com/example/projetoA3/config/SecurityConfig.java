@@ -22,11 +22,12 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/cadastro", "/login").permitAll()
-                .anyRequest().authenticated()
+        
+                .anyRequest().permitAll()
             );
 
         return http.build();
     }
+    
 }
 
