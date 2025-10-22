@@ -1,4 +1,4 @@
-
+@import './App.css';
 
 h1 {
   color: var(--h1);
@@ -39,4 +39,13 @@ button {
 button:hover {
   cursor: pointer;
   background-color: #04043e;
+}
+
+.cadastro-link {
+  text-decoration: none;
+  color: var(--button);
+  margin-top: 10px;
+  display: inline-block;
+  transition: color 0.2s;
+
 }

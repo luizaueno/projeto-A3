@@ -1,4 +1,4 @@
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './Login'
 import './login.css'
 import Cadastro from './Cadastro'
@@ -9,14 +9,13 @@ function App() {
   
   return (
     <>
-    <div>
-      <h1>Bem-vindo</h1>
-      <Login />
-    </div>
-    <div>
-      <h1>Cadastre-se</h1>
-      <Cadastro />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Login />} />
+        <Route path='/cadastro' element={<Cadastro />} />
+      </Routes>
+    </BrowserRouter>
+    
     </>
   )
 }
