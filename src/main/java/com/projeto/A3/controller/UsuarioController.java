@@ -5,7 +5,6 @@ import com.projeto.A3.model.Usuario; // entidade usuario
 import com.projeto.A3.repository.UsuarioRepository; // salvar e buscar no bd
 
 
-
 @RestController // responde requisições http
 @RequestMapping("/usuarios") // define o caminho base da url
 public class UsuarioController {
