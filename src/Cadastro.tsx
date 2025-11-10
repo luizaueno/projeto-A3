@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './cadastro.css';
 
 export default function Cadastro() {
@@ -11,7 +12,7 @@ export default function Cadastro() {
             <input className="input" type="password" placeholder="Senha" required />
             <input className="input" type="password" placeholder="Confirme sua Senha" required />
             <button id="botao" type='submit'>Cadastrar</button>
-
+            <Link to="/login" className="login-link">Entre aqui</Link>
         </div>
         </>
     )

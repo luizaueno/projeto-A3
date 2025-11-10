@@ -47,5 +47,9 @@ button:hover {
   margin-top: 10px;
   display: inline-block;
   transition: color 0.2s;
+}
 
+.cadastro-link:hover {
+  text-decoration: underline;
+  color: var(--button);
 }
